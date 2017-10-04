@@ -16,28 +16,31 @@ class Model {
             this.callback();
       }
       registrarInvitado(nombre) {
-            console.log(nombre);
-            this.invitados.push({
-                  nombre: nombre.value,
-                  confirmado: false,
-                  id: Utils.uuid()
-            });
-            console.log(this.invitados)
+            if (nombre.value != '' || nombre.value != null) {
+                  this.invitados.push({
+                        nombre: nombre.value,
+                        confirmado: false,
+                        id: Utils.uuid()
+                  });
+            }
+            this.notify();
+      }
+      removerInvitado (e, index) {
+            this.invitados.splice(index, 1);
             this.notify();
       }
 }
-const ListaInvitados = ({ invitados }) => {
-      console.log(invitados.length);
+const ListaInvitados = ({ invitados, model }) => {
       let li = '';
       if (invitados.length >= 1) {
-      li = invitados.map((item, index) => {
-            return (<li key={index}>
-                  {item.nombre}
-                  <label>Confirmed <input type="checkbox" /></label>
-                  <button>remove</button>
-            </li>
-            );
-      });    
+            li = invitados.map((item, index) => {
+                  return (<li key={index}>
+                        {item.nombre}
+                        <label>Confirmed <input type="checkbox" /></label>
+                        <button onClick={e => model.removerInvitado(e, index) }>remove</button>
+                  </li>
+                  );
+            });
       }
       return (<ul>{li}</ul>)
 }
@@ -57,7 +60,7 @@ const Application = ({ title, model }) => {
             </header>
             <div className="main">
                   <h2>Invitees</h2>
-                  <ListaInvitados invitados={model.invitados} />
+                  <ListaInvitados invitados={model.invitados} model={model} />
             </div>
       </div>
       );

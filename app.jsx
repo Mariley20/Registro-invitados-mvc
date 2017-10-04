@@ -4,8 +4,8 @@ class Model {
       constructor() {
             this.index = 0;
             this.invitados = [];
-            this.callback = null;
             this.input = null;
+            this.callback = null;
       }
 
       subscribe(render) {
@@ -16,15 +16,22 @@ class Model {
             this.callback();
       }
       registrarInvitado(nombre) {
-            if (nombre.value != '' || nombre.value != null) {
-                  this.invitados.push({
-                        nombre: nombre.value,
-                        confirmado: false,
-                        clase: '',
-                        id: Utils.uuid()
-                  });
+            console.log(nombre.textContent)
+            if ((this.invitados.length > 0) || (this.input.value != "") || (this.input.value != null) ) {
+                  if (nombre.value === "") {
+                        console.log("sdsd")
+                  } else {
+                        this.invitados.push({
+                              nombre: nombre.value,
+                              confirmado: false,
+                              clase: '',
+                              id: Utils.uuid()
+                        });
+                        // nombre.value = "";
+                        this.notify();
+                  }
             }
-            this.notify();
+            console.log(this.invitados)
       }
       removerInvitado(e, index) {
             this.invitados.splice(index, 1);
@@ -42,7 +49,7 @@ const ListaInvitados = ({ invitados, model }) => {
             li = invitados.map((item, index) => {
                   return (<li key={index} className={item.clase}>
                         {item.nombre}
-                        <label>Confirmed <input type="checkbox" checked={item.confirmado} onChange={e => model.marcarCheckbox(e, index)} /></label>
+                        <label>Confirmed <input type="checkbox" checked={item.confirmado} onClick={e => model.marcarCheckbox(e, index)} /></label>
                         <button onClick={e => model.removerInvitado(e, index)}>remove</button>
                   </li>
                   );

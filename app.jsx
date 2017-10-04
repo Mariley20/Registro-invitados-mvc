@@ -20,13 +20,19 @@ class Model {
                   this.invitados.push({
                         nombre: nombre.value,
                         confirmado: false,
+                        clase: '',
                         id: Utils.uuid()
                   });
             }
             this.notify();
       }
-      removerInvitado (e, index) {
+      removerInvitado(e, index) {
             this.invitados.splice(index, 1);
+            this.notify();
+      }
+      marcarCheckbox(e, index) {
+            this.invitados[index].confirmado = (e.target.checked) ? true : false;
+            this.invitados[index].clase = (e.target.checked) ? 'responded' : '';
             this.notify();
       }
 }
@@ -34,10 +40,10 @@ const ListaInvitados = ({ invitados, model }) => {
       let li = '';
       if (invitados.length >= 1) {
             li = invitados.map((item, index) => {
-                  return (<li key={index}>
+                  return (<li key={index} className={item.clase}>
                         {item.nombre}
-                        <label>Confirmed <input type="checkbox" /></label>
-                        <button onClick={e => model.removerInvitado(e, index) }>remove</button>
+                        <label>Confirmed <input type="checkbox" checked={item.confirmado} onChange={e => model.marcarCheckbox(e, index)} /></label>
+                        <button onClick={e => model.removerInvitado(e, index)}>remove</button>
                   </li>
                   );
             });

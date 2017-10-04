@@ -16,7 +16,6 @@ class Model {
             this.callback();
       }
       registrarInvitado(nombre) {
-            console.log(nombre.textContent)
             if ((this.invitados.length > 0) || (this.input.value != "") || (this.input.value != null) ) {
                   if (nombre.value === "") {
                         console.log("sdsd")

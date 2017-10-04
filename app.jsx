@@ -3,7 +3,7 @@ const porcentaje = 20;
 class Model {
       constructor() {
             this.index = 0;
-            this.players = 0;
+            this.invitados = [];
             this.callback = null;
             this.input = null;
       }
@@ -15,29 +15,31 @@ class Model {
       notify() {
             this.callback();
       }
-      totalPuntos() {
-            let total = 0;
-            for (let i = 0; i < this.players.length; i++) {
-                  total = total + this.players[i].score;
-            }
-            return total;
-      }
-      totalJugadores() {
-            return this.players.length;
-      }
-      agregarJugador(nombre) {
+      registrarInvitado(nombre) {
             console.log(nombre);
-            this.players.push({
-                  name: nombre.value,
-                  score: 0,
+            this.invitados.push({
+                  nombre: nombre.value,
+                  confirmado: false,
                   id: Utils.uuid()
             });
+            console.log(this.invitados)
             this.notify();
       }
-      modificarScore(e, score, index, x) {
-            this.players[index].score = score + x;
-            this.notify();
+}
+const ListaInvitados = ({ invitados }) => {
+      console.log(invitados.length);
+      let li = '';
+      if (invitados.length >= 1) {
+      li = invitados.map((item, index) => {
+            return (<li key={index}>
+                  {item.nombre}
+                  <label>Confirmed <input type="checkbox" /></label>
+                  <button>remove</button>
+            </li>
+            );
+      });    
       }
+      return (<ul>{li}</ul>)
 }
 
 const Application = ({ title, model }) => {
@@ -45,14 +47,17 @@ const Application = ({ title, model }) => {
             <header>
                   <h1>RSVP</h1>
                   <p> Registration App </p>
-                  <form id="registrar">
-                        <input type="text" name="name" placeholder="Invite Someone" />
+                  <form id="registrar" onSubmit={e => {
+                        e.preventDefault();
+                        model.registrarInvitado(model.input);
+                  }}>
+                        <input type="text" onChange={e => model.input = e.target} name="name" placeholder="Invite Someone" />
                         <button type="submit" name="submit" value="submit">Submit</button>
                   </form>
             </header>
             <div className="main">
                   <h2>Invitees</h2>
-                  <ul id="invitedList" />
+                  <ListaInvitados invitados={model.invitados} />
             </div>
       </div>
       );

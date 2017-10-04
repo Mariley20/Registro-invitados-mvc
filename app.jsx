@@ -16,7 +16,7 @@ class Model {
             this.callback();
       }
       registrarInvitado(nombre) {
-            if ((this.invitados.length > 0) || (this.input.value != "") || (this.input.value != null) ) {
+            if ((this.invitados.length > 0) || (this.input.value != "") ) {
                   if (nombre.value === "") {
                         console.log("sdsd")
                   } else {
@@ -26,7 +26,7 @@ class Model {
                               clase: '',
                               id: Utils.uuid()
                         });
-                        // nombre.value = "";
+                        this.input.value = "";
                         this.notify();
                   }
             }
